@@ -73,7 +73,7 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("https://db-alumni-backend-production.up.railway.app")); // Adjust allowed origins as necessary
+        config.setAllowedOrigins(List.of("https://db-project-zeta.vercel.app")); // Adjust allowed origins as necessary
         config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         config.setMaxAge(3600L);
@@ -85,7 +85,7 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("https://db-alumni-backend-production.up.railway.app")); // Adjust allowed origins as necessary
+        config.setAllowedOrigins(List.of("https://db-project-zeta.vercel.app")); // Adjust allowed origins as necessary
         config.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         config.setMaxAge(3600L);
