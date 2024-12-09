@@ -51,7 +51,7 @@ public class PostServiceImplementation implements PostService {
         post.setCategory(cat);
 
         // Define the image directory path
-        String imageDirectory = "C:\\Users\\sayal\\OneDrive\\Desktop\\Blog-Api\\images";
+        String imageDirectory = "E:\\Backend-images";
 
         // Handle image upload
         if (image != null && !image.isEmpty()) {

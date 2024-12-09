@@ -49,7 +49,6 @@ public class PostController {
         return new ResponseEntity<>(createPost, HttpStatus.CREATED);
     }
 
-
     //get by user- implement pagination
     @GetMapping({"/user/{userId}/posts"})
     public ResponseEntity<PostResponse> getPostsByUser(@PathVariable Integer userId, @RequestParam(value="pageNumber", defaultValue = "0", required = false) Integer pageNumber, @RequestParam(value="pageSize", defaultValue = "10", required = false)Integer pageSize) {
