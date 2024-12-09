@@ -39,7 +39,11 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // Disable CSRF for simplicity, consider enabling it for production
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS with custom configuration
                 .authorizeHttpRequests(auth -> auth
+<<<<<<< HEAD
                         .requestMatchers("/api/auth/**", "/error", "/api/categories/", "/api/user/{userId}/category/{categoryId}/posts", "/api/users/{userID}", "/api/posts/**", "/api/events/**", "/api/comments/post/{postId}/user/{userId}/comments").permitAll() // Allow unauthenticated access to auth endpoints
+=======
+                        .requestMatchers("/api/**").permitAll() // Allow unauthenticated access to auth endpoints
+>>>>>>> 88863f5d9c494c7b0df0a5f6f77a2d219ad8e173
                         .requestMatchers("/api/auth/make-admin/**").hasRole("ADMIN") // Only admins can access this endpoint
                         .anyRequest().authenticated() // All other requests require authentication
                 )
