@@ -51,7 +51,7 @@ public class PostServiceImplementation implements PostService {
         post.setCategory(cat);
 
         // Define the image directory path
-        String imageDirectory = "E:\\Blog-Api\\Backend-images";
+        String imageDirectory = "E:\\Blog-Api\\images";
 
         // Handle image upload
         if (image != null && !image.isEmpty()) {
@@ -102,6 +102,11 @@ public class PostServiceImplementation implements PostService {
                 .orElseThrow(() ->  new ResourceNotFoundException("Post", "postId", postId));
         this.postRepo.delete(post);
     }
+    
+    @Override
+    public long countAllPosts() {
+        return this.postRepo.count();
+    }
 
     @Override
     public PostResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy) {
@@ -112,11 +117,11 @@ public class PostServiceImplementation implements PostService {
         List<PostDto> postDto = allPosts.stream()
                 .map(post -> {
                     PostDto dto = this.modelMapper.map(post, PostDto.class);
-                    String imageUrl = "http://localhost:8080/post/image/" + post.getImageName();
+                    String imageUrl = "http://localhost:8080/" + post.getImageName();
                     dto.setImageName(imageUrl);
 
                     // Fetch the image bytes and set in the PostDto
-                    String imagePath = "C:\\Users\\sayal\\OneDrive\\Desktop\\Blog-Api\\images" + File.separator + post.getImageName();
+                    String imagePath = "E:\\Blog-Api\\images" + File.separator + post.getImageName();
                     File imageFile = new File(imagePath);
 
                     if (imageFile.exists()) {
@@ -159,11 +164,11 @@ public class PostServiceImplementation implements PostService {
         );
 
         // Add the image URL
-        String imageUrl = "http://localhost:8080/post/image/" + post.getImageName();
+        String imageUrl = "http://localhost:8080/" + post.getImageName();
         postDto.setImageName(imageUrl);
 
         // Fetch the image bytes and set in the PostDto
-        String imagePath = "C:\\Users\\sayal\\OneDrive\\Desktop\\Blog-Api\\images" + File.separator + post.getImageName();
+        String imagePath = "E:\\Blog-Api\\images" + File.separator + post.getImageName();
         File imageFile = new File(imagePath);
 
         if (imageFile.exists()) {

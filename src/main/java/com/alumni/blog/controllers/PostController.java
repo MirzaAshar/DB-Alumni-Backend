@@ -89,7 +89,12 @@ public class PostController {
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
 
-
+    @GetMapping("/posts/count")
+    public ResponseEntity<Long> countAllPosts() {
+        long count = this.postService.countAllPosts();
+        return new ResponseEntity<>(count, HttpStatus.OK);
+    }
+    
     @GetMapping("/posts/search/{search}")
     public ResponseEntity<List<PostDto>> searchPosts(@PathVariable String search) {
         List<PostDto> posts = this.postService.searchPosts(search);

@@ -16,6 +16,6 @@ public interface PostRepo extends JpaRepository<Post, Integer> {
     Page<Post> findByCategory(Category category, Pageable pageable);
     @Query("SELECT p FROM Post p WHERE p.title LIKE %:keyword% OR p.content LIKE %:keyword%")
     List<Post> searchByKeyword(@Param("keyword") String keyword);
-
-
+    @Query("SELECT COUNT(p) FROM Post p")
+    long count();
 }

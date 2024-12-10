@@ -25,4 +25,6 @@ public interface PostService  {
 
         List<PostDto> searchPosts(String keyword);
 
+        long countAllPosts();
+
 }
