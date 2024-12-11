@@ -56,7 +56,7 @@ public class NewsController {
         return ResponseEntity.ok(savedNews);
     }
     // Get All News
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<List<News>> getAllNews() {
         List<News> newsList = newsRepo.findAll();
         return ResponseEntity.ok(newsList);

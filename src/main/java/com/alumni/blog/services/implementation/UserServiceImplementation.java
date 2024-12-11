@@ -46,7 +46,7 @@ public class UserServiceImplementation implements UserService {
        User user=this.userRepo.findById(userID).orElseThrow(()->new ResourceNotFoundException("User", "Id", userID));
        user.setName(userDto.getName());
        user.setEmail(userDto.getEmail());
-       user.setPassword(userDto.getPassword());
+       user.setPassword(passwordEncoder.encode(userDto.getPassword()));
        user.setAbout(userDto.getAbout());
        user.setCnic(userDto.getCnic());
        user.setUniversityID(userDto.getUniversityID());
@@ -58,7 +58,7 @@ public class UserServiceImplementation implements UserService {
        user.setGraduationYear(userDto.getGraduationYear());
        user.setDegreeProgram(userDto.getDegreeProgram());
        user.setMajor(userDto.getMajor());
-       user.setConfirmpassword(userDto.getConfirmpassword());
+       user.setConfirmpassword(passwordEncoder.encode(userDto.getConfirmpassword()));
        User updatedUser=this.userRepo.save(user);
 
        return this.userToDto(updatedUser);
