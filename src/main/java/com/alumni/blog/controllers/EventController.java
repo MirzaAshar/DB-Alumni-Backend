@@ -5,7 +5,12 @@ import com.alumni.blog.repository.EventRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
@@ -24,7 +29,33 @@ public class EventController {
 
     // Create a new event
     @PostMapping("/create")
-    public ResponseEntity<Event> createEvent(@RequestBody Event event) {
+    public ResponseEntity<Event> createEvent(    @RequestPart("event") Event event,
+                                                 @RequestPart(value = "image", required = false) MultipartFile image) {
+        String imageDirectory = "E:\\Blog-Api\\images-event";
+        if (image != null && !image.isEmpty()) {
+            // Generate a unique image name
+            String imageName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
+            String imagePath = imageDirectory + File.separator + imageName;
+
+            // Ensure the directory exists
+            File directory = new File(imageDirectory);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            // Save the file to the directory
+            try {
+                // Save the file
+                Files.copy(image.getInputStream(), Paths.get(imagePath));
+                event.setImageName(imageName);
+                event.setImageData(image.getBytes());
+            } catch (IOException ex) {
+                throw new RuntimeException("Failed to save the image file: " + ex.getMessage(), ex);
+            }
+            event.setImageName(imageName);
+        } else {
+            event.setImageName("default.png"); // Use a default image if no file is uploaded
+        }
         Event savedEvent = eventRepository.save(event);
         return ResponseEntity.ok(savedEvent);
     }
@@ -49,7 +80,7 @@ public class EventController {
         event.setEventVenue(updatedEvent.getEventVenue());
         event.setEventOrganizer(updatedEvent.getEventOrganizer());
         event.setEventDescription(updatedEvent.getEventDescription());
-        event.setEventRegistration(updatedEvent.isEventRegistration());
+
 
         Event savedEvent = eventRepository.save(event);
         return ResponseEntity.ok(savedEvent);
