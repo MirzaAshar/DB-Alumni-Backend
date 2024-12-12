@@ -1,9 +1,11 @@
 package com.alumni.blog.services.implementation;
 
+import com.alumni.blog.entities.Log;
 import com.alumni.blog.entities.Role;
 import com.alumni.blog.entities.User;
 import com.alumni.blog.exceptions.ResourceNotFoundException;
 import com.alumni.blog.payloads.UserDto;
+import com.alumni.blog.repository.LogRepository;
 import com.alumni.blog.repository.UserRepo;
 import com.alumni.blog.services.UserService;
 import org.modelmapper.ModelMapper;
@@ -21,14 +23,17 @@ public class UserServiceImplementation implements UserService {
     private UserRepo userRepo;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private LogRepository logRepository;
+
     @Override
     public UserDto createUser(UserDto userDto) {
-       User user= this.modelMapper.map(userDto, User.class);
+        User user= this.modelMapper.map(userDto, User.class);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User savedUser=this.userRepo.save(user);
-       return this.userToDto(savedUser);
+        return this.userToDto(savedUser);
     }
-//    private User dtoToUser(UserDto userDto) {
+    //    private User dtoToUser(UserDto userDto) {
 //        User user =
 //        user.setId(userDto.getId());
 //        user.setName(userDto.getName());
@@ -38,38 +43,47 @@ public class UserServiceImplementation implements UserService {
 //        return user;
 //    }
     public UserDto userToDto(User user) {
-       return this.modelMapper.map(user, UserDto.class);
+        return this.modelMapper.map(user, UserDto.class);
 
     }
     @Override
     public UserDto updateUser(UserDto userDto, Integer userID) {
-       User user=this.userRepo.findById(userID).orElseThrow(()->new ResourceNotFoundException("User", "Id", userID));
-       user.setName(userDto.getName());
-       user.setEmail(userDto.getEmail());
-       user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-       user.setAbout(userDto.getAbout());
-       user.setCnic(userDto.getCnic());
-       user.setUniversityID(userDto.getUniversityID());
-       user.setCurrentOrganization(userDto.getCurrentOrganization());
-       user.setCurrentDesignation(userDto.getCurrentDesignation());
-       user.setCurrentCountry(userDto.getCurrentCountry());
-       user.setCurrentCity(userDto.getCurrentCity());
-       user.setCampusLocation(userDto.getCampusLocation());
-       user.setGraduationYear(userDto.getGraduationYear());
-       user.setDegreeProgram(userDto.getDegreeProgram());
-       user.setMajor(userDto.getMajor());
-       user.setConfirmpassword(passwordEncoder.encode(userDto.getConfirmpassword()));
-       User updatedUser=this.userRepo.save(user);
-
-       return this.userToDto(updatedUser);
+        User user=this.userRepo.findById(userID).orElseThrow(()->new ResourceNotFoundException("User", "Id", userID));
+        user.setName(userDto.getName());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setAbout(userDto.getAbout());
+        user.setCnic(userDto.getCnic());
+        user.setUniversityID(userDto.getUniversityID());
+        user.setCurrentOrganization(userDto.getCurrentOrganization());
+        user.setCurrentDesignation(userDto.getCurrentDesignation());
+        user.setCurrentCountry(userDto.getCurrentCountry());
+        user.setCurrentCity(userDto.getCurrentCity());
+        user.setCampusLocation(userDto.getCampusLocation());
+        user.setGraduationYear(userDto.getGraduationYear());
+        user.setDegreeProgram(userDto.getDegreeProgram());
+        user.setMajor(userDto.getMajor());
+        user.setConfirmpassword(passwordEncoder.encode(userDto.getConfirmpassword()));
+        User updatedUser=this.userRepo.save(user);
+        Log log = new Log();
+        log.setActionType("UPDATE");
+        log.setUserId((long) updatedUser.getId());
+        log.setLogMessage("User updated with ID: " + updatedUser.getId());
+        logRepository.save(log);
+        return this.userToDto(updatedUser);
     }
 
     @Override
     public UserDto getUserByID(Integer userID) {
-       User user=this.userRepo.findById(userID).orElseThrow(()->new ResourceNotFoundException("User", "Id", userID));
-       UserDto userDto=userToDto(user);
-       userDto.setPassword(null);
-       return userDto;
+        User user=this.userRepo.findById(userID).orElseThrow(()->new ResourceNotFoundException("User", "Id", userID));
+        UserDto userDto=userToDto(user);
+        userDto.setPassword(null);
+        return userDto;
+    }
+    @Override
+    public User getUserByIDD(Integer userID) {
+        return this.userRepo.findById(userID).orElseThrow(()->new ResourceNotFoundException("User", "Id", userID));
+
     }
 
     @Override
@@ -82,8 +96,13 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public void deleteUser(Integer userID) {
-   User user= this.userRepo.findById(userID).orElseThrow(()->new ResourceNotFoundException("User", "Id", userID));
-    this.userRepo.delete(user);
+        User user= this.userRepo.findById(userID).orElseThrow(()->new ResourceNotFoundException("User", "Id", userID));
+        this.userRepo.delete(user);
+        Log log = new Log();
+        log.setActionType("DELETE");
+        log.setUserId(userID.longValue());
+        log.setLogMessage("User deleted with ID: " + userID);
+        logRepository.save(log);
     }
     @Override
     public UserDto registerUser(UserDto userDto) {
@@ -105,6 +124,12 @@ public class UserServiceImplementation implements UserService {
 
         // Save the new user in the database
         User savedUser = this.userRepo.save(user);
+
+        Log log = new Log();
+        log.setActionType("REGISTER");
+        log.setUserId((long) savedUser.getId());
+        log.setLogMessage("User registered with email: " + savedUser.getEmail());
+        logRepository.save(log);
 
         // Convert saved User back to UserDto
         return this.userToDto(savedUser);

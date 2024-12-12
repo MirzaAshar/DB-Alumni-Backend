@@ -1,4 +1,5 @@
 package com.alumni.blog.controllers;
+import com.alumni.blog.entities.User;
 import com.alumni.blog.payloads.ApiResponse;
 import com.alumni.blog.payloads.UserDto;
 import com.alumni.blog.services.UserService;
@@ -46,6 +47,18 @@ public class UserController {
     {
         return  ResponseEntity.ok(this.userService.getUserByID(userID));
     }
+    @GetMapping("/check-role/{userID}")
+    public Boolean getUserRole(@PathVariable Integer userID) {
+        // Fetch the user by ID
+        User user = this.userService.getUserByIDD(userID);
 
+        if (user != null) {
+            // Check if the user has the "admin" role
+            return user.getRoles().stream()
+                    .anyMatch(role -> role.getName().equalsIgnoreCase("ROLE_ADMIN"));
+        }
+        // Return false if the user is not found or doesn't have the admin role
+        return false;
+    }
 
 }
