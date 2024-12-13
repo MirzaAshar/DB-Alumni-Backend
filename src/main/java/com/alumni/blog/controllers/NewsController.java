@@ -46,7 +46,7 @@ public class NewsController {
         News newss = new News();
         newss.setTitle(news.getTitle());
         newss.setContent(news.getContent());
-        newss.setAuthor_name(author.getUserName());
+        newss.setAuthor_name(author.getUsername());
         newss.setAuthor_id(author.getId());
         newss.setCreatedAt(LocalDateTime.now());
         String imageDirectory = "E:\\Blog-Api-Final\\images-news";
