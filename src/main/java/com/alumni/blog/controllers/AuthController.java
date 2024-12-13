@@ -1,9 +1,9 @@
 package com.alumni.blog.controllers;
+import com.alumni.blog.entities.Log;
 import com.alumni.blog.entities.User;
 import com.alumni.blog.payloads.JwtAuthRequest;
 import com.alumni.blog.payloads.UserDto;
 import com.alumni.blog.repository.UserRepo;
-import com.alumni.blog.security.CustomUserDetails;
 import com.alumni.blog.security.JwtAuthResponse;
 import com.alumni.blog.security.JwtTokenHelper;
 import com.alumni.blog.services.UserService;
@@ -47,12 +47,15 @@ public class AuthController {
         UserDetails userDetails= this.userDetailsService.loadUserByUsername(request.getUsername());
         User user = userRepo.findByEmail(request.getUsername())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password"));
-          String token=  this.jwtTokenHelper.generateToken(userDetails);
-          JwtAuthResponse response=new JwtAuthResponse();
+        String token=  this.jwtTokenHelper.generateToken(userDetails);
+        JwtAuthResponse response=new JwtAuthResponse();
         response.setUserID(user.getId());
-          response.setToken(token);
-
-          return new ResponseEntity<JwtAuthResponse>(response, HttpStatus.OK);
+        response.setToken(token);
+        Log log = new Log();
+        log.setActionType("LOGGED_IN");
+        log.setUserId((long) user.getId());
+        log.setLogMessage("User logged in with ID: " + user.getId());
+        return new ResponseEntity<JwtAuthResponse>(response, HttpStatus.OK);
     }
     public void authenticate(String username, String password) {
         UsernamePasswordAuthenticationToken authToken =

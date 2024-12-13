@@ -37,8 +37,7 @@ public class Event {
     @Column(name = "event_description", length = 1000)
     private String eventDescription;
 
-    @Column(name = "event_registration", nullable = false)
-    private boolean eventRegistration;
+
 
     @ManyToMany
     @JoinTable(
@@ -47,4 +46,8 @@ public class Event {
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id")
     )
     private Set<User> attendees = new HashSet<>();
+
+    @Lob // Large Object Annotation for storing large data like images
+    private byte[] imageData;
+    private String imageName;
 }

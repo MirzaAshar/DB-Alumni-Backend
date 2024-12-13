@@ -11,6 +11,7 @@ import com.alumni.blog.repository.CategoryRepo;
 import com.alumni.blog.repository.PostRepo;
 import com.alumni.blog.repository.UserRepo;
 import com.alumni.blog.services.PostService;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -51,7 +52,7 @@ public class PostServiceImplementation implements PostService {
         post.setCategory(cat);
 
         // Define the image directory path
-        String imageDirectory = "E:\\Blog-Api\\images";
+        String imageDirectory = "E:\\Blog-Api-Final\\images";
 
         // Handle image upload
         if (image != null && !image.isEmpty()) {
@@ -121,7 +122,7 @@ public class PostServiceImplementation implements PostService {
                     dto.setImageName(imageUrl);
 
                     // Fetch the image bytes and set in the PostDto
-                    String imagePath = "E:\\Blog-Api\\images" + File.separator + post.getImageName();
+                    String imagePath = "E:\\Blog-Api-Final\\images" + File.separator + post.getImageName();
                     File imageFile = new File(imagePath);
 
                     if (imageFile.exists()) {
@@ -168,7 +169,7 @@ public class PostServiceImplementation implements PostService {
         postDto.setImageName(imageUrl);
 
         // Fetch the image bytes and set in the PostDto
-        String imagePath = "E:\\Blog-Api\\images" + File.separator + post.getImageName();
+        String imagePath = "E:\\Blog-Api-Final\\images" + File.separator + post.getImageName();
         File imageFile = new File(imagePath);
 
         if (imageFile.exists()) {
@@ -183,7 +184,7 @@ public class PostServiceImplementation implements PostService {
         return postDto;
     }
 
-
+@Transactional
 @Override
 public PostResponse getPostsByUser(Integer userId, Integer pageNumber, Integer pageSize) {
     Pageable p = PageRequest.of(pageNumber, pageSize);

@@ -119,7 +119,7 @@ public class PostController {
     }
     @GetMapping("/post/image/{imageName}")
     public ResponseEntity<?> getPostImage(@PathVariable String imageName) {
-        String imagePath = "C:\\Users\\sayal\\OneDrive\\Desktop\\Blog-Api\\images" + File.separator + imageName;
+        String imagePath = "E:\\Blog-Api-Final\\images" + File.separator + imageName;
         File imageFile = new File(imagePath);
 
         if (imageFile.exists()) {

@@ -32,6 +32,7 @@ public class News {
 
     private String author_name;
     private Integer author_id;
+    private String imageName;
     @Lob // Large Object Annotation for storing large data like images
-    private byte[] image;
+    private byte[] imageData;
 }
